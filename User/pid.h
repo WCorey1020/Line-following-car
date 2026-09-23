@@ -15,7 +15,4 @@ typedef struct
     float ERROR_INTEGRAL_MAX;
 }Pid;
 */
-//试用分支功能第二次
-//上一次在主循环干坏事没被发现 我在干一次
-//我在主分支干坏事
 #endif
