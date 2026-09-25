@@ -1,6 +1,7 @@
 task_2\pid.o: ..\User\pid.c
 task_2\pid.o: ..\User\pid.h
 task_2\pid.o: ..\User\interrupt_main.h
+task_2\pid.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
 task_2\pid.o: ..\User\motor.h
 task_2\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
 task_2\pid.o: ../Core/Inc/stm32f1xx_hal_conf.h
@@ -9,7 +10,6 @@ task_2\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_def.h
 task_2\pid.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h
 task_2\pid.o: ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h
 task_2\pid.o: ../Drivers/CMSIS/Include/core_cm3.h
-task_2\pid.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
 task_2\pid.o: ../Drivers/CMSIS/Include/cmsis_version.h
 task_2\pid.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
 task_2\pid.o: ../Drivers/CMSIS/Include/cmsis_armcc.h

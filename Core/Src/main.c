@@ -69,11 +69,6 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
-  if(speed_flag==1)
-  {
-    speed_flag=0;
-    Speed_Calculate();
-  }
 
   /* USER CODE BEGIN 1 */
 
@@ -128,7 +123,6 @@ int main(void)
       MotorSpeed(left,Pid_Calculate(&pid_left));
       MotorSpeed(right,Pid_Calculate(&pid_right));
       UART_Sending("%.2f,%.2f,%.2f\n",pid_left.target,pid_left.actual,pid_left.output);
-      UART_Sending("%.2f,%.2f,%.2f\n",pid_right.target,pid_right.actual,pid_right.output);
     }
     /* USER CODE END WHILE */
 

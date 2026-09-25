@@ -1,7 +1,8 @@
 #ifndef __INTERRUPT_MAIN_H
 #define __INTERRUPT_MAIN_H
+#include "stdint.h"
 
-extern int32_t r_counter,l_counter;
-extern uint8_t speed_flag;
+extern volatile int32_t r_counter,l_counter;
+extern volatile uint8_t speed_flag;
 
 #endif

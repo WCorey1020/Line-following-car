@@ -1,6 +1,7 @@
 #ifndef __PID_H
 #define __PID_H
 #include "interrupt_main.h"
+#include "stdint.h"
 
 typedef struct
 {
