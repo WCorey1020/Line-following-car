@@ -127,7 +127,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             error_last_s=error_now_s;
 
             UART_Sending("%.2f,%.2f,%.2f\n",target_s,speed_w,output_s);
-            MotorSpeed(output_s);
+            BMotorSpeed(output_s);
         }
         else if(mode==2)
         {
@@ -140,7 +140,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
             error_last_p=error_now_p;
 
             UART_Sending("%d,%d,%.2f\n",target_p,counter,output_p);
-            MotorSpeed(output_p);
+            BMotorSpeed(output_p);
         }
     }
 }
