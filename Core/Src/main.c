@@ -49,15 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-  extern uint16_t len;
-  extern uint16_t flag;
-  extern uint8_t* rx_read_buf;
-  float target_s=0;
-  int target_p=0;
-  uint8_t dma_rx_buf[128];
-  int ret=0;
-  uint8_t mode=0;
-  uint16_t val=0; 
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -77,6 +69,11 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
+  if(speed_flag==1)
+  {
+    speed_flag=0;
+    Speed_Calculate();
+  }
 
   /* USER CODE BEGIN 1 */
 
@@ -107,39 +104,31 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
+  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1|TIM_CHANNEL_2);
   HAL_TIM_Encoder_Start(&htim2,TIM_CHANNEL_1|TIM_CHANNEL_2);
+  HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_1|TIM_CHANNEL_2);
   HAL_TIM_Base_Start_IT(&htim1);
-  HAL_UARTEx_ReceiveToIdle_DMA(&huart1,dma_rx_buf,128);
-  __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
-
-
+  Pid pid_left;
+  Pid pid_right;
+  Pid_Init(&pid_left,20,5,2,2000);
+  Pid_Init(&pid_right,20,5,2,2000);
+  pid_left.target=200;
+  pid_right.target=200;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    if(flag == 1)
+    if(speed_flag==1)
     {
-        uint16_t parse_len = len;
-        if(parse_len >= 128)
-            parse_len = 127;
-        rx_read_buf[parse_len] = '\0';
-
-        ret = sscanf((char*)rx_read_buf,"%hhu,%hu",&mode,&val);
-        if(ret == 2)
-        {
-            if(mode == 1)
-            {
-                target_s=val;
-            }
-            else if(mode == 2)
-            {
-                target_p=val;
-            }
-        }
-        flag = 0; 
+      Speed_Calculate();
+      pid_left.actual=l_speed;
+      pid_right.actual=r_speed;
+      MotorSpeed(left,Pid_Calculate(&pid_left));
+      MotorSpeed(right,Pid_Calculate(&pid_right));
+      UART_Sending("%.2f,%.2f,%.2f\n",pid_left.target,pid_left.actual,pid_left.output);
+      UART_Sending("%.2f,%.2f,%.2f\n",pid_right.target,pid_right.actual,pid_right.output);
     }
     /* USER CODE END WHILE */
 
