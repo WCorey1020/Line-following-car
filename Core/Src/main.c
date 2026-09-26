@@ -1,24 +1,25 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.c
-  * @brief          : Main program body
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2026 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "dma.h"
+#include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -33,42 +34,28 @@
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-  extern uint16_t len;
-  extern uint16_t flag;
-  extern uint8_t* rx_read_buf;
-  float target_s=0;
-  int target_p=0;
-  uint8_t dma_rx_buf[128];
-  int ret=0;
-  uint8_t mode=0;
-  uint16_t val=0; 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 /* USER CODE BEGIN PFP */
-
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
 /* USER CODE END 0 */
 
 /**
@@ -79,7 +66,6 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -88,14 +74,12 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -106,45 +90,31 @@ int main(void)
   MX_USART1_UART_Init();
   MX_TIM1_Init();
   MX_TIM4_Init();
+  MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
-  HAL_TIM_Encoder_Start(&htim2,TIM_CHANNEL_1|TIM_CHANNEL_2);
-  HAL_TIM_Base_Start_IT(&htim1);
-  HAL_UARTEx_ReceiveToIdle_DMA(&huart1,dma_rx_buf,128);
-  __HAL_DMA_DISABLE_IT(huart1.hdmarx, DMA_IT_HT);
-
-
+ HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1);
+ HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_2);
+ //我嘞个豆啊HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_1|TIM_CHANNEL_2);这玩意为什么只开启通道二
+ //太可恶了 哭哭
+ HAL_TIM_Encoder_Start(&htim2,TIM_CHANNEL_1|TIM_CHANNEL_2);
+ HAL_TIM_Encoder_Start(&htim4,TIM_CHANNEL_1|TIM_CHANNEL_2);
+ HAL_TIM_Base_Start_IT(&htim1);
+ setPIDParam(&l_pid,20,6,6,2000);
+ setPIDParam(&r_pid,20,6,6,2000);
+ 
+ setPIDParam(&pos_pid,1.5,0,0,2000);
+ setPIDtarget(&pos_pid,49.5);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    if(flag == 1)
-    {
-        uint16_t parse_len = len;
-        if(parse_len >= 128)
-            parse_len = 127;
-        rx_read_buf[parse_len] = '\0';
-
-        ret = sscanf((char*)rx_read_buf,"%hhu,%hu",&mode,&val);
-        if(ret == 2)
-        {
-            if(mode == 1)
-            {
-                target_s=val;
-            }
-            else if(mode == 2)
-            {
-                target_p=val;
-            }
-        }
-        flag = 0; 
-    }
-    /* USER CODE END WHILE */
+ while (1)
+ {
+  
+  /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-  }
+ }
   /* USER CODE END 3 */
 }
 
@@ -188,7 +158,6 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-
 /* USER CODE END 4 */
 
 /**
@@ -198,11 +167,11 @@ void SystemClock_Config(void)
 void Error_Handler(void)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
+ /* User can add his own implementation to report the HAL error return state */
+ __disable_irq();
+ while (1)
+ {
+ }
   /* USER CODE END Error_Handler_Debug */
 }
 #ifdef USE_FULL_ASSERT
@@ -216,8 +185,8 @@ void Error_Handler(void)
 void assert_failed(uint8_t *file, uint32_t line)
 {
   /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */

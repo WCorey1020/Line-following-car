@@ -1,6 +1,7 @@
 #include "uart.h"
 #include "usart.h"
 #include "stdarg.h"
+#include "string.h"
 
 static uint8_t tx_buf[128];
 
