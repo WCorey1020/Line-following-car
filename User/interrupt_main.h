@@ -3,5 +3,5 @@
 #include "pid.h"
 
 extern Pid l_pid,r_pid;
-
+extern Pid pos_pid;
 #endif

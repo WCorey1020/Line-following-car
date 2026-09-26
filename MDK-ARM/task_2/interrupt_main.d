@@ -26,9 +26,11 @@ task_2\interrupt_main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_corte
 task_2\interrupt_main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h
 task_2\interrupt_main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h
 task_2\interrupt_main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h
+task_2\interrupt_main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_spi.h
 task_2\interrupt_main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h
 task_2\interrupt_main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 task_2\interrupt_main.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_uart.h
 task_2\interrupt_main.o: ..\User\pid.h
 task_2\interrupt_main.o: ..\User\motor.h
 task_2\interrupt_main.o: ..\User\uart.h
+task_2\interrupt_main.o: ..\User\ccd.h
