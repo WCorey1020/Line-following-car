@@ -18,7 +18,7 @@ float limit_output(float output)
 
 void MotorSpeed(MotorChoice right_or_left, int16_t pwm_val)
 {
-    if(right_or_left==left)
+    if(right_or_left==right)
     {
         if(pwm_val>0)
     {
@@ -33,12 +33,12 @@ void MotorSpeed(MotorChoice right_or_left, int16_t pwm_val)
         __HAL_TIM_SET_COMPARE(&htim3,TIM_CHANNEL_1,-limit_output(pwm_val));
     }
     else if(pwm_val==0)
-    {
+    { 
         HAL_GPIO_WritePin(BIN1_GPIO_Port,BIN1_Pin,GPIO_PIN_SET);
         HAL_GPIO_WritePin(BIN2_GPIO_Port,BIN2_Pin,GPIO_PIN_SET);
     }
     }
-    else if(right_or_left==right)
+    else if(right_or_left==left)
     {
          if(pwm_val>0)
     {

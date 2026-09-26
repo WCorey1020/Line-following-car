@@ -1,6 +1,5 @@
 task_2\pid.o: ..\User\pid.c
 task_2\pid.o: ..\User\pid.h
-task_2\pid.o: ..\User\interrupt_main.h
 task_2\pid.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
 task_2\pid.o: ..\User\motor.h
 task_2\pid.o: ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h
